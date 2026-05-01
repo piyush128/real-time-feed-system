@@ -14,3 +14,8 @@ export async function findUserByUsername(username){
     const result = await pool.query('select * from users where username = $1', [username]);
     return result.rows[0];
 }
+
+export async function findUserById(userId){
+    const result = await pool.query('select * from users where user_id = $1', [userId]);
+    return result.rows[0];
+}
