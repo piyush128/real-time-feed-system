@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { Kafka } from "kafkajs";
 import pool from '../../shared/db/index.js';
+import { redisClient } from '../../shared/redis/index.js';
 
 const kafka = new Kafka({
     clientId: 'feed-service',
@@ -33,6 +34,8 @@ export async function consumeEvent(topic) {
                 'INSERT INTO feed (user_id, post_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
                 [follower.follower_id, postId]
                 );
+                const followerId = follower.follower_id;
+                await redisClient.del(`feed:${followerId}`);
             }
         }
     })
