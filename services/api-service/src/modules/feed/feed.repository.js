@@ -1,4 +1,4 @@
-import pool from "../../config/db.js";
+import pool from "../../../../../shared/db/index.js";
 
 export async function getFeed(userId) {
     const result = await pool.query(`
