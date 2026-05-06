@@ -3,17 +3,27 @@ import { redisClient } from "../../../../../shared/redis/index.js";
 import pool from "../../../../../shared/db/index.js";
 
 export async function showFeed(userId) {
-    const cachedIds = await redisClient.zrevrange(`feed:${userId}`, 0, 19);
-    if(cachedIds.length > 0){
-        const cachedFeed = await getPostsByIds(cachedIds);
-        console.log('Cache hit');
-        return cachedFeed;
+    try {
+        const cachedIds = await redisClient.zrevrange(`feed:${userId}`, 0, 19);
+        if (cachedIds.length > 0) {
+            console.log('Cache hit');
+            return await getPostsByIds(cachedIds);
+        }
+    } catch (error) {
+        console.error('Redis read failed, falling back to DB:', error.message);
     }
+
     const posts = await getFeed(userId);
-    for (const p of posts) {
-        await redisClient.zadd(`feed:${userId}`, new Date(p.created_at).getTime(), String(p.post_id));
-      }
-    await redisClient.expire(`feed:${userId}`, 3600);
+
+    try {
+        for (const p of posts) {
+            await redisClient.zadd(`feed:${userId}`, new Date(p.created_at).getTime(), String(p.post_id));
+        }
+        await redisClient.expire(`feed:${userId}`, 3600);
+    } catch (error) {
+        console.error('Redis write failed:', error.message);
+    }
+
     console.log('Cache miss');
     return posts;
 }
