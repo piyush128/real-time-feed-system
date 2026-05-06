@@ -27,8 +27,13 @@ io.on('connection', (socket) => {
 
 const kafka = new Kafka({
     clientId: 'notification-service',
-    brokers: [process.env.KAFKA_BROKER]
+    brokers: [process.env.KAFKA_BROKER],
+    retry: {
+        retries: 10,
+        initialRetryTime: 3000,
+    }
 });
+
 
 const consumer = kafka.consumer({
     groupId: 'notification-service-group'
@@ -57,6 +62,6 @@ await consumer.run({
 })
 
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.NOTIFICATION_PORT || 3001;
 httpServer.listen(PORT, () => console.log(`Notification service running on port ${PORT}`));
 
