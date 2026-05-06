@@ -24,6 +24,12 @@ export async function consumeEvent(topic) {
         eachMessage: async ({message}) => {
             const { userId, postId } = JSON.parse(message.value.toString());
 
+            const isCelebrity = await pool.query('select is_celebrity from users where user_id = $1', [userId]);
+            if(isCelebrity.rows[0].is_celebrity){
+                console.log('User is celebrity, skipping fanout');
+                return;
+            }
+
             const { rows: followers } = await pool.query(
                 'SELECT follower_id FROM followers WHERE following_id = $1 AND status = $2',
                 [userId, 'accepted']
