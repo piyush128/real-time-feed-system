@@ -178,6 +178,27 @@ Every push to `main` triggers GitHub Actions:
 
 ---
 
+## Performance Testing
+
+Load tested against the live GKE deployment using [k6](https://k6.io/).
+
+**Endpoint:** `GET /api/feed` (Redis-cached, JWT protected)
+
+| VUs | Duration | Throughput | Avg Latency | p(95) | Error Rate |
+|-----|----------|------------|-------------|-------|------------|
+| 10  | 30s      | 77.7 req/s | 124ms       | 263ms | 0%         |
+| 50  | 30s      | 187.5 req/s | 261ms      | 733ms | 0%         |
+
+API remained stable under 50 concurrent users with zero errors. Latency increase under load is expected queuing behaviour.
+
+To run the load test yourself:
+```bash
+brew install k6
+k6 run load-test/feed.test.js
+```
+
+---
+
 ## Kubernetes Deployment (GKE)
 
 All services run on a 2-node GKE cluster (`e2-small`, `asia-south1-a`).
