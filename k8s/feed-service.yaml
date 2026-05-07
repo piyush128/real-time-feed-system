@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feed-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: feed-service
+  template:
+    metadata:
+      labels:
+        app: feed-service
+    spec:
+      containers:
+        - name: feed-service
+          image: asia-south1-docker.pkg.dev/realtime-feed-system/feed-system-repo/feed-service:latest
+          envFrom:
+            - configMapRef:
+                name: feed-system-config
+            - secretRef:
+                name: feed-system-secret
+
+
