@@ -14,8 +14,8 @@ Deployed on **Google Kubernetes Engine (GKE)** with a full CI/CD pipeline via Gi
                         ┌─────────────────────────────────────────┐
                         │              GKE Cluster                │
                         │                                         │
-  Client ──────────────▶│  api-service (x2 replicas)             │
-  (HTTP/WebSocket)       │       │                                 │
+  Client ──────────────▶│  api-service (x2 replicas)              │
+  (HTTP/WebSocket)      │       │                                 │
                         │       ├──▶ PostgreSQL                   │
                         │       ├──▶ Redis (cache)                │
                         │       └──▶ Kafka (producer)             │
@@ -27,7 +27,7 @@ Deployed on **Google Kubernetes Engine (GKE)** with a full CI/CD pipeline via Gi
                         │         │             │                 │
                         │         ▼             ▼                 │
                         │    PostgreSQL       Redis               │
-                        │    (feed table)   (pub/sub)            │
+                        │    (feed table)   (pub/sub)             │
                         └─────────────────────────────────────────┘
 
   GitHub Push ──▶ GitHub Actions ──▶ Build & Push Images ──▶ kubectl rollout restart
