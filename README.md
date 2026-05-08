@@ -4,8 +4,6 @@ A production-grade distributed activity feed and notification system — built t
 
 Deployed on **Google Kubernetes Engine (GKE)** with a full CI/CD pipeline via GitHub Actions.
 
-**Live API:** `http://34.93.229.248`
-
 ---
 
 ## Architecture
