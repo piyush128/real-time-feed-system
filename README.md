@@ -152,7 +152,11 @@ curl http://localhost:3000/api/feed \
   -H "Authorization: Bearer <token>"
 ```
 
-**5. Connect to real-time notifications (WebSocket)**
+**5. Import Postman collection**
+
+Import `postman/collection.json` into Postman. Set the `{{token}}` variable after login — all protected requests will use it automatically.
+
+**6. Connect to real-time notifications (WebSocket)**
 ```
 ws://localhost:3001?token=<jwt>
 ```
